@@ -125,7 +125,7 @@ std::vector<VulkanRenderer::DeviceInfo> VulkanRenderer::GetDevices()
 	VkApplicationInfo app_info{};
 	app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	app_info.pApplicationName = EMULATOR_NAME;
-	app_info.applicationVersion = VK_MAKE_VERSION(EMULATOR_VERSION_LEAD, EMULATOR_VERSION_MAJOR, EMULATOR_VERSION_MINOR);
+	app_info.applicationVersion = VK_MAKE_VERSION(EMULATOR_VERSION_MAJOR, EMULATOR_VERSION_MINOR, EMULATOR_VERSION_PATCH);
 	app_info.pEngineName = EMULATOR_NAME;
 	app_info.engineVersion = app_info.applicationVersion;
 	app_info.apiVersion = apiVersion;
@@ -339,7 +339,7 @@ VulkanRenderer::VulkanRenderer()
 	VkApplicationInfo app_info{};
 	app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	app_info.pApplicationName = EMULATOR_NAME;
-	app_info.applicationVersion = VK_MAKE_VERSION(EMULATOR_VERSION_LEAD, EMULATOR_VERSION_MAJOR, EMULATOR_VERSION_MINOR);
+	app_info.applicationVersion = VK_MAKE_VERSION(EMULATOR_VERSION_MAJOR, EMULATOR_VERSION_MINOR, EMULATOR_VERSION_PATCH);
 	app_info.pEngineName = EMULATOR_NAME;
 	app_info.engineVersion = app_info.applicationVersion;
 	app_info.apiVersion = apiVersion;
@@ -2200,6 +2200,8 @@ void VulkanRenderer::GetTextureFormatInfoVK(Latte::E_GX2SURFFMT format, bool isD
 	else
 	{
 		formatInfoOut->vkImageAspect = VK_IMAGE_ASPECT_COLOR_BIT;
+		if(format == (Latte::E_GX2SURFFMT::R16_G16_B16_A16_FLOAT | Latte::E_GX2SURFFMT::FMT_BIT_SRGB)) // Seen in Sonic Transformed level Starry Speedway. SRGB should just be ignored for native float formats?
+			format = Latte::E_GX2SURFFMT::R16_G16_B16_A16_FLOAT;
 		switch (format)
 		{
 			// RGBA formats
